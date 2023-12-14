@@ -1,0 +1,72 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    <title>ajouter un tableau</title>
+{% endblock %}
+
+{% block body %}
+  
+  <div class="container-fluid row">
+    <br>
+    
+    <form class="col" action="/tableau/add" method="post">
+      <fieldset>
+        <legend>Saisir les informations du tableau</legend>
+        <br>
+        <div class="form-group">
+          <label for="type_epoque_id">Selectionnez une epoque :*</label>
+          <select class="form-select" id="type_epoque_id" name="type_epoque_id">
+              <option value="">Epoque</option>
+            {% for epoque in Type_epoques %}
+              <option value="{{ epoque.id_type_epoque }}">{{ epoque.libelle }}</option>
+            {% endfor %}
+          </select>
+          <small class="form-text text-muted">*ce champ est obligatoire</small>
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="nom_tableau">Entrez le nom du tableau :*</label>
+          <input class="form-control" type="text" name="nom_tableau" id="nom_tableau" placeholder="Entrez le nom du tableau" required>
+          <small class="form-text text-muted">*ce champ est obligatoire</small>
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="prix_assurance">Prix de l'assurance :*</label>
+          <input class="form-control" type="number" step=".01" name="prix_assurance" id="prix_assurance" placeholder="Entrez un prix" required>
+          <small class="form-text text-muted">*ce champ est obligatoire</small>
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="date_realisation">Selectionnez une date de realisation :*</label>
+          <input class="form-control" type="date" name="date_realisation" id="date_realisation" required>
+          <small class="form-text text-muted">*ce champ est obligatoire</small>
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="peintre">Entrez un peintre :</label>
+          <input class="form-control" type="text" name="peintre" id="peintre">
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="localisation_musee">Entrez une localisation :</label>
+          <input class="form-control" type="text" name="localisation_musee" id="localisation_musee">
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="photo">Entrez une photo :</label>
+          <input class="form-control" type="text" name="photo" id="photo">
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="mouvement">Entrez un mouvement :</label>
+          <input class="form-control" type="text" name="mouvement" id="mouvement">
+        </div>
+        <br>
+        <input type="submit" name="boutonvalider" id="validerTableau" class="btn btn-primary">
+        <br>
+      </fieldset>
+    </form>
+    <div class="col">
+    </div>
+  </div>
+{% endblock %}

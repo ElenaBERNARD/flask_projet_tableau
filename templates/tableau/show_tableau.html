@@ -1,0 +1,67 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    <title>afficher les tableaux</title>
+{% endblock %}
+
+{% block body %}
+<h3>Tableaux</h3>
+<a href="/tableau/add">Ajouter un tableau</a>
+<br><br>
+
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>id</th>
+            <th>Nom</th>
+            <th>Prix assurance</th>
+            <th>Date</th>
+            <th>Peintre</th>
+            <th>Musee</th>
+            <th>Photo</th>
+            <th>Mouvement</th>
+            <th>Epoque</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% if Tableaux | length >= 1 %}
+        {% for ligne in Tableaux %}
+           <tr>
+               <td>{{ ligne.id_tableau }}</td>
+               <td>{{ ligne.nom_tableau }}</td>
+               <td>{{ ligne.prix_assurance }}</td>
+               <td>{{ ligne.date_realisation }}</td>
+               <td>{{ ligne.peintre }}</td>
+               <td>{{ ligne.localisation_musee }}</td>
+               <td>
+                   {%  if ligne.photo is not none %}
+                       <img style="width:40px;height:40px"  src="{{ url_for('static', filename = 'images/' + ligne['photo']) }}"  alt="image  de {{ ligne.nom }}" >
+                   {% else %}
+                       <img style="width:40px;height:40px"   src="{{ url_for('static', filename='images/no_photo.jpeg')}}"  alt="no image" >
+                   {% endif %}
+               </td>
+               <td>{{ ligne.mouvement }}</td>
+               <td>
+                    {% if ligne.type_epoque_id is not none %}
+                        {{ Type_epoques[ligne.type_epoque_id-1].libelle }}
+                    {% else %}
+                        None
+                    {% endif %}
+               </td>
+               <td>
+                   <a href="/tableau/edit?id_tableau={{ ligne.id_tableau }}">editer</a>&nbsp;
+                   <a href="/tableau/delete?id_tableau={{ ligne.id_tableau }}" >supprimer</a>
+               </td>
+           </tr>
+        {% endfor %}
+    {% else %}
+            <tr>
+                  <td>
+                      pas de de tableau
+                  </td>
+           </tr>
+    {% endif %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    <title>modifier un type d'epoque</title>
+{% endblock %}
+
+{% block body %}
+  <h2>Modifier un type d'epoque</h2>
+  {% if error %}
+    <p class=error><strong>Error:</strong> {{ error }}
+  {% endif %}
+  <div class="container-fluid row">
+    <br>
+    
+    <form class="col" action="/type_epoque/edit" method="post">
+      <fieldset>
+        <legend>Saisir les informations du type d'epoque</legend>
+        <input type="hidden" name="id_type_epoque" size="18" value="{{ Type_epoque.id_type_epoque }}" id="id_type_epoque">
+        <br>
+        <div class="form-group">
+          <label for="libelle">Entrez le libelle du type d'epoque :*</label>
+          <input class="form-control" type="text" value="{{ Type_epoque.libelle }}" name="libelle" id="libelle" placeholder="Entrez le libelle" required>
+          <small class="form-text text-muted">*ce champ est obligatoire</small>
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="annee_debut">Entrez la date de debut</label>
+          <input class="form-control" type="number" step="1" value="{{ Type_epoque.annee_debut }}" name="annee_debut" id="annee_debut" placeholder="Entrez une annee de debut" required>
+          <small class="form-text text-muted">*ce champ est obligatoire</small>
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="annee_fin">Entrez la date de debut</label>
+          <input class="form-control" type="number" step="1" value="{{ Type_epoque.annee_fin }}" name="annee_fin" id="annee_fin" placeholder="Entrez une annee de fin" required>
+          <small class="form-text text-muted">*ce champ est obligatoire</small>
+        </div>
+        <br>
+        <input type="submit" name="boutonvalider" id="validerTypeEpoque" class="btn btn-primary">
+        <br>
+      </fieldset>
+    </form>
+    <div class="col">
+    </div>
+  </div>
+{% endblock %}

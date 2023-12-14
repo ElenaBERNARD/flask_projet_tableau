@@ -1,0 +1,74 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    <title>modifier un tableau</title>
+{% endblock %}
+
+{% block body %}
+  <div class="container-fluid row">
+    <br>
+    
+    <form class="col" action="/tableau/edit" method="post">
+      <fieldset>
+        <legend>Modifier les informations du tableau</legend>
+        <input type="hidden" name="id_tableau" size="18" value="{{ Tableau.id_tableau }}" id="id_tableau">
+        <br>
+        <div class="form-group">
+          <label for="type_epoque_id">Selectionnez une epoque :*</label>
+          <select class="form-select" id="type_epoque_id" name="type_epoque_id" required>
+            <option value="{{ Tableau.type_epoque_id }}">{{ Type_epoques[Tableau.type_epoque_id-1].libelle }}</option>
+            {% for type in Type_epoques %}
+                {% if Tableau.type_epoque_id != type.id_type_epoque  %}
+                    <option value="{{ type.id_type_epoque }}">{{ type.libelle }}</option>
+                {% endif %}
+            {% endfor %}
+          </select>
+          <small class="form-text text-muted">*ce champ est obligatoire</small>
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="nom_tableau">Entrez le nom du tableau :*</label>
+          <input class="form-control" type="text" value="{{ Tableau.nom_tableau }}" name="nom_tableau" id="nom_tableau" placeholder="Entrez le nom du tableau" required>
+          <small class="form-text text-muted">*ce champ est obligatoire</small>
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="prix_assurance">Prix de l'assurance :*</label>
+          <input class="form-control" type="number" step=".01" value="{{ Tableau.prix_assurance }}" name="prix_assurance" id="prix_assurance" placeholder="Entrez un prix" required>
+          <small class="form-text text-muted">*ce champ est obligatoire</small>
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="date_realisation">Selectionnez une date de realisation :*</label>
+          <input class="form-control" type="date" value="{{ Tableau.date_realisation }}" name="date_realisation" id="date_realisation" required>
+          <small class="form-text text-muted">*ce champ est obligatoire</small>
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="peintre">Entrez un peintre :</label>
+          <input class="form-control" type="text" value="{{ Tableau.peintre }}" name="peintre" id="peintre">
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="localisation_musee">Entrez une localisation :</label>
+          <input class="form-control" type="text" value="{{ Tableau.localisation_musee }}" name="localisation_musee" id="localisation_musee">
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="photo">Entrez une photo :</label>
+          <input class="form-control" type="text" value="{{ Tableau.photo }}" name="photo" id="photo">
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="mouvement">Entrez un mouvement :</label>
+          <input class="form-control" type="text" value="{{ Tableau.mouvement }}" name="mouvement" id="mouvement">
+        </div>
+        <br>
+        <input type="submit" name="boutonvalider" id="validerTableau" class="btn btn-primary">
+        <br>
+      </fieldset>
+    </form>
+    <div class="col">
+    </div>
+  </div>
+{% endblock %}

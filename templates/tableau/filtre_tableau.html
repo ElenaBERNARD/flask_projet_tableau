@@ -1,0 +1,60 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    <title>Filtrer les tableaux</title>
+{% endblock %}
+
+{% block body %}
+<h3>Tableaux</h3>
+
+<form class="m-1" method="get" action="/tableau/filtre">
+    <fieldset>
+        <legend>Filtrer les tableaux</legend>
+        <label class="form-label" for="filter_nom">Nom d'un tableau</label><br>
+        <input class="form-control" type="text" name="filter_nom" size="18" placeholder="Entrer le nom d'un tableau" id="filter_nom"><br>
+        <label class="form-label" for="filtreEpoque">Epoque :</label>
+        <div class="container-fluid m-2" id="filtreEpoque">
+        {% for type in typesEpoque %}
+            <input class="m-1" type="checkbox" value="{{ type.id }}" name="filter_items"> {{ type.libelle }} </input>
+            <br>
+        {% endfor %}
+        </div>
+        <br>
+        <label class="form-label" for="filter_min">Prix assurance compris entre :</label>
+        <div class="container-fluid m-2">
+            <input type="text" value="" placeholder="Minimum" name="filter_min" id="filter_min">
+            <input type="text" value="" placeholder="Maximum" name="filter_max">
+        </div>
+        <br>
+        <input class="btn btn-primary" type="submit" value="Modifier" name="Modifier">
+    </fieldset>
+</form>
+<br><br>
+
+    {% if tableaux | length >= 1 %}
+    <div class="container-fluid row center">
+        {% for ligne in tableaux %}
+           <div class="card m-2" style="width: 30rem;">
+             {%  if ligne.photo is not none %}
+             <img class="m-1" style="width:80%;height:80%"  src="{{ url_for('static', filename = 'images/' + ligne['photo']) }}"  alt="image  de {{ ligne.nom }}" >
+             {% else %}
+             <img class="m-1" style="width:80%;height:80%"   src="{{ url_for('static', filename='images/no_photo.jpeg')}}"  alt="no image" >
+             {% endif %}
+             <div class="card-body">
+              <h5 class="card-title">{{ ligne.id }} : {{ ligne.nomTableau }}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">{{ ligne.peintre }}, {{ ligne.dateRealisation }}</h6>
+               <p class="card-text">
+                 {{ ligne.prixAssurance }} <br>
+                 {{ ligne.localisationMusee }} <br>
+                 {{ ligne.mouvement }}</p>
+             </div>
+<!--               {{ ligne.typeEpoque_id }}-->
+          </div>
+        {% endfor %}
+    </div>
+    {% else %}
+            <div class="card">
+                      pas de de tableau
+            </div>
+    {% endif %}
+{% endblock %}
