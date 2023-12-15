@@ -1,0 +1,85 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    <title>suprimer un type d'époque</title>
+{% endblock %}
+
+{% block body %}
+<br>
+<div class="container-fluid">
+    <h1 style="color: red">CONFIRMATION DE SUPPRESSION</h1>
+    <p class="text-lg fs-4">
+        Vous vous apprêtez à <span style="color: red" class="fw-bold">supprimer</span> le type d'époque "{{ type_epoque_current.libelle }}" (ID: {{ type_epoque_current.id_type_epoque }}).<br>
+    </p>
+    {% if Tableaux | length >= 1 %}
+        <p class="text-lg fs-5">
+            Vous devez d'abort suprimer les <span style="color: red" class="fw-bold">{{ Tableaux | length }}</span> tableau(x) d'époque "{{ type_epoque_current.libelle }}"
+        </p>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>id</th>
+                    <th>Nom</th>
+                    <th>Prix assurance</th>
+                    <th>Date</th>
+                    <th>Peintre</th>
+                    <th>Musee</th>
+                    <th>Photo</th>
+                    <th>Mouvement</th>
+                    <th>Epoque</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for tableau in Tableaux %}
+                <tr>
+                    <td>{{ tableau.id_tableau }}</td>
+                    <td>{{ tableau.nom_tableau }}</td>
+                    <td>{{ tableau.prix_assurance }}</td>
+                    <td>{{ tableau.date_realisation }}</td>
+                    <td>{{ tableau.peintre }}</td>
+                    <td>{{ tableau.localisation_musee }}</td>
+                    <td>
+                        {%  if tableau.photo is not none %}
+                            <img style="width:40px;height:40px"  src="{{ url_for('static', filename = 'images/' + tableau['photo']) }}"  alt="image  de {{ tableau.nom }}" >
+                        {% else %}
+                            <img style="width:40px;height:40px"   src="{{ url_for('static', filename='images/no_photo.jpeg')}}"  alt="no image" >
+                        {% endif %}
+                    </td>
+                    <td>{{ tableau.mouvement }}</td>
+                    <td>
+                        {% if tableau.type_epoque_id is not none %}
+                            {{ Type_epoques[tableau.type_epoque_id-1].libelle }}
+                        {% else %}
+                            None
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form action="/type_epoque/delete_control" method="post">
+                            <fieldset>
+                                <input type="hidden" name="id_type_epoque" value="{{ type_epoque_current.id_type_epoque }}">
+                                <input type="hidden" name="id_tableau" value="{{ tableau.id_tableau }}">
+                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                            </fieldset>
+                        </form><br>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="text-lg fs-5">
+            Cela supprimera <span style="color: red" class="fw-bold">1</span> éléments dans la table type epoque.
+        </p>
+        <br>
+        <h4>Êtes-vous sûrs de vouloir continuer ?</h4>
+        <form action="/type_epoque/delete" method="post">
+            <fieldset>
+                <input type="hidden" name="id_type_epoque" value="{{ type_epoque_current.id_type_epoque }}">
+                <button type="submit" class="btn btn-danger">Supprimer</button>
+            </fieldset>
+        </form><br>
+    {% endif %}
+    <a href="/type_epoque/show" class="btn btn-secondary">Annuler</a>
+</div>
+{% endblock %}

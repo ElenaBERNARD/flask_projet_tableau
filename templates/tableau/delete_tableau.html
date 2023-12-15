@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    <title>suprimer un tableau</title>
+{% endblock %}
+
+{% block body %}
+<br>
+<div class="container-fluid">
+    <h1 style="color: red">CONFIRMATION DE SUPPRESSION</h1>
+    <p>Vous vous apprêtez à supprimer le tableau d'ID {{ id_tableau }}.<br>
+        Cela supprimera <span style="color: red" class="fw-bold">1</span> éléments dans la table tableau.
+    </p>
+    <br>
+    <h4>Êtes-vous sûrs de vouloir continuer ?</h4>
+    <form action="/tableau/delete" method="post">
+        <fieldset>
+            <input type="hidden" name="id_tableau" value="{{ id_tableau }}">
+            <button type="submit" class="btn btn-danger">Supprimer</button>
+        </fieldset>
+    </form><br>
+    <a href="/tableau/show" class="btn btn-secondary">Annuler</a>
+</div>
+{% endblock %}

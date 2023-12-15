@@ -32,6 +32,10 @@ def showIndex():
     print('Affichage de l\'index')
     return render_template('index.html')
 
+
+###     SHOW     ###
+
+
 @app.route('/tableau/show')
 def show_tableau():
     mycursor = get_db().cursor()
@@ -54,7 +58,9 @@ def show_type_epoque():
     liste_type_epoques = mycursor.fetchall()
     return render_template('type_epoque/show_type_epoque.html', Type_epoques=liste_type_epoques)
 
+
 ###     ADD     ###
+
 
 @app.route('/tableau/add', methods=['GET'])
 def add_tableau():
@@ -104,7 +110,9 @@ def valid_add_type_epoque():
     flash(message, 'alert-success')
     return redirect('/type_epoque/show')
 
+
 ###     EDIT     ###
+
 
 @app.route('/tableau/edit', methods=['GET'])
 def edit_tableau():
@@ -178,22 +186,99 @@ def valid_edit_type_epoque():
     flash(message, 'alert-success')
     return redirect('/type_epoque/show')
 
+
 ###     DELETE     ###
 
-@app.route('/type-epoque/delete', methods=['GET'])
-def delete_type_epqoue():
-    id = request.args.get('id', '')
-    print ("un type d'epoque supprimé, id :",id)
-    message=u'un type d\'epoque supprimé, id : ' + id
-    flash(message, 'alert-warning')
-    return redirect('/type_epoque/show')
 
 @app.route('/tableau/delete', methods=['GET'])
 def delete_tableau():
-    id = request.args.get('id', '')
-    message=u'un tableau supprimé, id : ' + id
+    id_tableau = request.args.get('id_tableau', '')
+    return render_template('tableau/delete_tableau.html', id_tableau=id_tableau)
+
+@app.route('/tableau/delete', methods=['POST'])
+def valid_delete_tableau():
+    id_tableau = request.form.get('id_tableau',0)
+    message=u'Un tableau a été supprimé, id : ' + id_tableau
+    mycursor = get_db().cursor()
+    tuple_param = (id_tableau)
+    sql="DELETE FROM tableau WHERE id_tableau=%s;"
+    mycursor.execute(sql,tuple_param)
+    get_db().commit()
     flash(message, 'alert-warning')
     return redirect('/tableau/show')
+
+
+@app.route('/type_epoque/delete', methods=['GET'])
+def delete_type_epqoue():
+    mycursor = get_db().cursor()
+    id_type_epoque = request.args.get('id_type_epoque', '')
+    tuple_delete = (id_type_epoque)
+    
+    sql = ''' SELECT *
+        FROM type_epoque
+        WHERE id_type_epoque=%s'''
+    mycursor.execute(sql, tuple_delete)
+    type_epoque_current = mycursor.fetchone()
+    
+    sql2 = ''' SELECT *
+        FROM tableau
+        WHERE type_epoque_id=%s;'''
+    mycursor.execute(sql2, tuple_delete)
+    liste_tableau = mycursor.fetchall()
+    sql3 = ''' SELECT *
+        FROM type_epoque'''
+    mycursor.execute(sql3)
+    liste_type_epoque = mycursor.fetchall()
+    return render_template('type_epoque/delete_type_epoque.html', type_epoque_current=type_epoque_current, Tableaux=liste_tableau, Type_epoques=liste_type_epoque)
+
+@app.route('/type_epoque/delete_control', methods=['POST'])
+def delete_control_type_epoque():
+    mycursor = get_db().cursor()
+    
+    #Supression du tableau
+    id_tableau = request.form.get('id_tableau',0)
+    message=u'Un tableau a été supprimé, id : ' + id_tableau
+    
+    tuple_param = (id_tableau)
+    sql="DELETE FROM tableau WHERE id_tableau=%s;"
+    mycursor.execute(sql,tuple_param)
+    get_db().commit()
+
+    #Renvoie vers la page
+    id_type_epoque = request.form.get('id_type_epoque', '')
+    tuple_delete = (id_type_epoque)
+    
+    sql = ''' SELECT *
+        FROM type_epoque
+        WHERE id_type_epoque=%s'''
+    mycursor.execute(sql, tuple_delete)
+    type_epoque_current = mycursor.fetchone()
+    
+    sql2 = ''' SELECT *
+        FROM tableau
+        WHERE type_epoque_id=%s;'''
+    mycursor.execute(sql2, tuple_delete)
+    liste_tableau = mycursor.fetchall()
+    sql3 = ''' SELECT *
+        FROM type_epoque'''
+    mycursor.execute(sql3)
+    liste_type_epoque = mycursor.fetchall()
+    
+    flash(message, 'alert-warning')
+    return render_template('type_epoque/delete_type_epoque.html', type_epoque_current=type_epoque_current, Tableaux=liste_tableau, Type_epoques=liste_type_epoque)
+
+
+@app.route('/type_epoque/delete', methods=['POST'])
+def valid_delete_type_epoque():
+    id_type_epoque = request.form.get('id_type_epoque',0)
+    message=u'Un type depoque a été supprimé, id : ' + id_type_epoque
+    mycursor = get_db().cursor()
+    tuple_param = (id_type_epoque)
+    sql="DELETE FROM type_epoque WHERE id_type_epoque=%s;"
+    mycursor.execute(sql,tuple_param)
+    get_db().commit()
+    flash(message, 'alert-warning')
+    return redirect('/type_epoque/show')
 
 @app.route('/tableau/filtre', methods=['GET'])
 def filtre_tableau():
