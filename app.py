@@ -39,15 +39,13 @@ def showIndex():
 @app.route('/tableau/show')
 def show_tableau():
     mycursor = get_db().cursor()
-    sql=''' SELECT *
-    FROM tableau'''
-    sql2='''SELECT *
-    FROM type_epoque;'''
+    sql=''' SELECT tableau.*, type_epoque.libelle AS type_epoque_libelle
+    FROM tableau
+    LEFT JOIN type_epoque ON tableau.type_epoque_id = type_epoque.id_type_epoque;
+    '''
     mycursor.execute(sql)
     liste_tableaux = mycursor.fetchall()
-    mycursor.execute(sql2)
-    liste_type_epoques = mycursor.fetchall()
-    return render_template('tableau/show_tableau.html', Tableaux=liste_tableaux, Type_epoques=liste_type_epoques)
+    return render_template('tableau/show_tableau.html', Tableaux=liste_tableaux)
 
 @app.route('/type_epoque/show')
 def show_type_epoque():
@@ -220,16 +218,14 @@ def delete_type_epqoue():
     mycursor.execute(sql, tuple_delete)
     type_epoque_current = mycursor.fetchone()
     
-    sql2 = ''' SELECT *
-        FROM tableau
-        WHERE type_epoque_id=%s;'''
+    sql2=''' SELECT tableau.*, type_epoque.libelle AS type_epoque_libelle
+    FROM tableau
+    LEFT JOIN type_epoque ON tableau.type_epoque_id = type_epoque.id_type_epoque
+    WHERE type_epoque_id=%s;
+    '''
     mycursor.execute(sql2, tuple_delete)
-    liste_tableau = mycursor.fetchall()
-    sql3 = ''' SELECT *
-        FROM type_epoque'''
-    mycursor.execute(sql3)
-    liste_type_epoque = mycursor.fetchall()
-    return render_template('type_epoque/delete_type_epoque.html', type_epoque_current=type_epoque_current, Tableaux=liste_tableau, Type_epoques=liste_type_epoque)
+    liste_tableaux = mycursor.fetchall()
+    return render_template('type_epoque/delete_type_epoque.html', type_epoque_current=type_epoque_current, Tableaux=liste_tableaux)
 
 @app.route('/type_epoque/delete_control', methods=['POST'])
 def delete_control_type_epoque():

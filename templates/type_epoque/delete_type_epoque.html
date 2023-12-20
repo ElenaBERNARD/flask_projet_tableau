@@ -47,13 +47,7 @@
                         {% endif %}
                     </td>
                     <td>{{ tableau.mouvement }}</td>
-                    <td>
-                        {% if tableau.type_epoque_id is not none %}
-                            {{ Type_epoques[tableau.type_epoque_id-1].libelle }}
-                        {% else %}
-                            None
-                        {% endif %}
-                    </td>
+                    <td>{{ tableau.type_epoque_libelle }}<br>ID: {{ tableau.type_epoque_id }}</td>
                     <td>
                         <form action="/type_epoque/delete_control" method="post">
                             <fieldset>
