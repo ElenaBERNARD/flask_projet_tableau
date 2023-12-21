@@ -7,26 +7,43 @@
 {% block body %}
 <h3>Tableaux</h3>
 
-<form class="m-1" method="get" action="/tableau/filtre">
+<form class="m-1" method="post" action="/tableau/filtre">
     <fieldset>
         <legend>Filtrer les tableaux</legend>
-        <label class="form-label" for="filter_nom">Nom d'un tableau</label><br>
-        <input class="form-control" type="text" name="filter_nom" size="18" placeholder="Entrer le nom d'un tableau" id="filter_nom"><br>
-        <label class="form-label" for="filtreEpoque">Epoque :</label>
-        <div class="container-fluid m-2" id="filtreEpoque">
-        {% for type in typesEpoque %}
-            <input class="m-1" type="checkbox" value="{{ type.id }}" name="filter_items"> {{ type.libelle }} </input>
-            <br>
-        {% endfor %}
+        <div class="form-group">
+            <label for="filter_word">Recherche textuelle :</label>
+            <input class="form-control" type="text" name="filter_word" id="filter_word" placeholder="Recherche"
+                value="{% if session['filter_word'] is defined %}{{ session['filter_word'] }}{% endif %}">
         </div>
         <br>
-        <label class="form-label" for="filter_min">Prix assurance compris entre :</label>
-        <div class="container-fluid m-2">
-            <input type="text" value="" placeholder="Minimum" name="filter_min" id="filter_min">
-            <input type="text" value="" placeholder="Maximum" name="filter_max">
+        {% if filter_items is defined %}
+            <div class="form-group">
+            <h4>Epoques :</h4>
+            {% for filter_item in filter_items %}
+                <input type="checkbox" name="filter_types" value="{{ filter_item.id_type_epoque }}"
+                {% set id_item = filter_item.id_type_epoque | string %}
+                {% if session['filter_types'] %}
+                    {{ ' cheked ' if (id_item in session['filter_types']) else '' }}
+                {% endif %}
+            > {{ filter_item.libelle }}
+            {% endfor %}
+            </div>
+        {% endif %}
+        <br>
+        <div class="form-group">
+            <label for="filter_min">Prix assurance minimum :</label>
+            <input class="form-control" ttype="number" step=".01" name="filter_min" id="filter_min" placeholder="Minimum"
+                value="{% if session['filter_min'] is defined %}{{ session['filter_min'] }}{% endif %}">
         </div>
         <br>
-        <input class="btn btn-primary" type="submit" value="Modifier" name="Modifier">
+        <div class="form-group">
+            <label for="filter_max">Prix assurance maximum :</label>
+            <input class="form-control" ttype="number" step=".01" name="filter_max" id="filter_max" placeholder="Maximum"
+                value="{% if session['filter_max'] is defined %}{{ session['filter_max'] }}{% endif %}">
+        </div>
+        <br>
+        <input type="submit" name="boutonvalider" id="validerFiltre" class="btn btn-primary">
+        <br>
     </fieldset>
 </form>
 <br><br>

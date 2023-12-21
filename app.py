@@ -32,9 +32,9 @@ def showIndex():
     print('Affichage de l\'index')
     return render_template('index.html')
 
-
-###     SHOW     ###
-
+##################################################
+##########             SHOW             ##########
+##################################################
 
 @app.route('/tableau/show')
 def show_tableau():
@@ -57,7 +57,9 @@ def show_type_epoque():
     return render_template('type_epoque/show_type_epoque.html', Type_epoques=liste_type_epoques)
 
 
-###     ADD     ###
+##################################################
+##########             ADD              ##########
+##################################################
 
 
 @app.route('/tableau/add', methods=['GET'])
@@ -109,7 +111,9 @@ def valid_add_type_epoque():
     return redirect('/type_epoque/show')
 
 
-###     EDIT     ###
+##################################################
+##########             EDIT             ##########
+##################################################
 
 
 @app.route('/tableau/edit', methods=['GET'])
@@ -185,7 +189,9 @@ def valid_edit_type_epoque():
     return redirect('/type_epoque/show')
 
 
-###     DELETE     ###
+##################################################
+##########            DELETE            ##########
+##################################################
 
 
 @app.route('/tableau/delete', methods=['GET'])
@@ -276,6 +282,38 @@ def valid_delete_type_epoque():
     flash(message, 'alert-warning')
     return redirect('/type_epoque/show')
 
+
+##################################################
+##########             ETAT             ##########
+##################################################
+
+
+@app.route('/tableau/etat')
+def etat_tableau():
+    mycursor = get_db().cursor()
+    sql=''' SELECT 
+    SUM(prix_assurance) AS total_prix_assurance,
+    COUNT(*) AS nb_tableaux
+    FROM tableau;
+    '''
+    mycursor.execute(sql)
+    prix_assurance = mycursor.fetchone()
+    sql2='''SELECT type_epoque.id_type_epoque, type_epoque.libelle,
+    COUNT(tableau.id_tableau) AS nb_tableau_par_type,
+    SUM(tableau.prix_assurance) AS total_prix_par_type
+    FROM tableau
+    JOIN type_epoque ON tableau.type_epoque_id = type_epoque.id_type_epoque
+    GROUP BY tableau.type_epoque_id;'''
+    mycursor.execute(sql2)
+    liste_tableaux = mycursor.fetchall()
+    return render_template('tableau/etat_tableau.html', Prix_assurance=prix_assurance, Tableaux=liste_tableaux)
+
+
+##################################################
+##########            FILTRE            ##########
+##################################################
+
+
 @app.route('/tableau/filtre', methods=['GET'])
 def filtre_tableau():
     filter_nom = request.args.get('filter_nom', None)
@@ -304,6 +342,10 @@ def filtre_tableau():
             message += ' id: '+case + ' ; '
         flash(message, 'alert-success')
     return render_template('tableau/filtre_tableau.html', tableaux=tableaux, typesEpoque=typesEpoque)
+
+
+###     FIN DU CODE     ###
+
 
 @app.route('/')
 def show_accueil():

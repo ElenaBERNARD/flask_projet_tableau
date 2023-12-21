@@ -39,3 +39,10 @@ VALUES (NULL, 'La Joconde', '4000', '1506-10-21', 'Léonard de Vinci', 'Louvre',
        (NULL,'Portrait du bouffon Gonella','1230','1445-03-18', 'Jean Fouquet', 'Kunsthistorisches Museum', 'leProtraitduBouffonGonella.jpeg',NULL, 4),
        (NULL,'La liberté guidant le peuple', '150.5','1830-12-25', 'Eugène DelaCroix', 'Louvre', 'laLiberteGuidantlePeuple.jpeg', 'romantisme', 3),
        (NULL,'Rentable de l Agneau mystique', '1010','1432-01-05', 'Jan van Eyck', 'Cathédrale Saint-Bavon de Gand', 'AgneauMystique.jpeg',NULL, 4);
+
+ALTER TABLE tableau
+DROP FOREIGN KEY tableau_ibfk_1;
+
+ALTER TABLE tableau
+ADD CONSTRAINT fk_tableau_type_epoque
+FOREIGN KEY (type_epoque_id) REFERENCES type_epoque(id_type_epoque);

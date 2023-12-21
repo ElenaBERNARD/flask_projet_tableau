@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    <title>afficher les tableaux</title>
+{% endblock %}
+
+{% block body %}
+<h3>Tableaux</h3>
+<p class="text-lg fs-5">
+    Cout des assurances : <span style="color: red" class="fw-bold">{{ Prix_assurance.total_prix_assurance }}</span>€ pour <span style="color: red" class="fw-bold">{{ Prix_assurance.nb_tableaux }}</span> tableaux
+</p>
+<br><br>
+
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Libelle</th>
+            <th>Nombre tableau</th>
+            <th>Total prix assurance</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% if Tableaux | length >= 1 %}
+        {% for tableau in Tableaux %}
+           <tr>
+                <td>{{ tableau.id_type_epoque }}</td>
+                <td>{{ tableau.libelle }}</td>
+                <td>{{ tableau.nb_tableau_par_type }}</td>
+                <td>{{ tableau.total_prix_par_type }}</td>
+           </tr>
+        {% endfor %}
+    {% else %}
+         <tr>
+            <td>
+                pas de de tableau
+            </td>
+        </tr>
+    {% endif %}
+    </tbody>
+</table>
+{% endblock %}
